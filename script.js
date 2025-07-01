@@ -19,17 +19,44 @@ const losingMessages = [
   "Try again! You can do it!"
 ];
 
+// Difficulty settings
+const difficulties = {
+  easy:   { time: 40, dropInterval: 900, winScore: 15, dropSpeed: 5 },
+  normal: { time: 30, dropInterval: 600, winScore: 20, dropSpeed: 4 },
+  hard:   { time: 20, dropInterval: 400, winScore: 28, dropSpeed: 2.7 }
+};
+let currentDifficulty = 'normal';
+
+// Milestone messages (score: message)
+const milestones = [
+  { score: 5, message: "Great start! Keep going!" },
+  { score: 10, message: "Halfway there!" },
+  { score: 15, message: "Amazing! You're getting close!" },
+  { score: 20, message: "Incredible! Almost at the goal!" }
+];
+// Track which milestones have been shown
+let shownMilestones = new Set();
+
 // Wait for button click to start the game
 document.getElementById("start-btn").addEventListener("click", startGame);
 document.getElementById("reset-btn").addEventListener("click", resetGame);
+
+// Listen for difficulty change
+document.getElementById("difficulty").addEventListener("change", function(e) {
+  currentDifficulty = e.target.value;
+  resetGame(); // Reset game when difficulty changes
+});
 
 function startGame() {
   // Prevent multiple games from running at once
   if (gameRunning) return;
 
+  // Get difficulty settings
+  const settings = difficulties[currentDifficulty];
+
   gameRunning = true;
   score = 0;
-  timeLeft = 30;
+  timeLeft = settings.time;
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
 
@@ -42,9 +69,30 @@ function startGame() {
     }
   }, 1000);
 
-  // Create new drops more frequently (e.g., every 600 milliseconds)
-  dropMaker = setInterval(createDrop, 600);
+  // Create new drops at the interval for this difficulty
+  dropMaker = setInterval(() => createDrop(settings), settings.dropInterval);
+
+  shownMilestones = new Set(); // Reset milestones at game start
 }
+
+// Utility to play a sound by element ID
+function playSound(id) {
+  const audio = document.getElementById(id);
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play();
+  }
+}
+
+// Update button event listeners to play sound
+document.getElementById("start-btn").addEventListener("click", function() {
+  playSound("sfx-button");
+  startGame();
+});
+document.getElementById("reset-btn").addEventListener("click", function() {
+  playSound("sfx-button");
+  resetGame();
+});
 
 function endGame() {
   gameRunning = false;
@@ -57,14 +105,16 @@ function endGame() {
 
   // Pick and show a random message based on score
   let message;
-  const isWin = score >= 20;
+  const settings = difficulties[currentDifficulty];
+  const isWin = score >= settings.winScore;
   if (isWin) {
+    playSound("sfx-win");
     message = winningMessages[Math.floor(Math.random() * winningMessages.length)];
     showConfetti();
   } else {
     message = losingMessages[Math.floor(Math.random() * losingMessages.length)];
   }
-  alert(`${message}\nYour score: ${score}`);
+  alert(`${message}\nYour score: ${score}\n(${capitalize(currentDifficulty)} mode: Need ${settings.winScore} to win)`);
 }
 
 function resetGame() {
@@ -76,14 +126,15 @@ function resetGame() {
   const drops = document.querySelectorAll(".water-drop");
   drops.forEach(drop => drop.remove());
 
-  // Reset score and timer
+  // Reset score and timer to current difficulty
+  const settings = difficulties[currentDifficulty];
   score = 0;
-  timeLeft = 30;
+  timeLeft = settings.time;
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
 }
 
-function createDrop() {
+function createDrop(settings = difficulties[currentDifficulty]) {
   if (!gameRunning) return;
 
   // Create a new div element that will be our water drop
@@ -108,27 +159,66 @@ function createDrop() {
   const xPosition = Math.random() * (gameWidth - 60);
   drop.style.left = xPosition + "px";
 
-  // Make drops fall for 4 seconds
-  drop.style.animationDuration = "4s";
+  // Make drops fall for X seconds (difficulty dependent)
+  drop.style.animationDuration = settings.dropSpeed + "s";
 
-  // Add the new drop to the game screen
+  // Add the new drop to the game screen (add to DOM)
   document.getElementById("game-container").appendChild(drop);
 
-  // Increment or decrement score when drop is clicked
+  // Remove drop from DOM when clicked (player collects or avoids)
   drop.addEventListener("click", () => {
     if (isBadDrop) {
       score = Math.max(0, score - 1);
+      playSound("sfx-miss");
     } else {
       score += 1;
+      playSound("sfx-collect");
     }
     document.getElementById("score").textContent = score;
-    drop.remove();
+
+    // Check for milestones and show message if reached
+    for (const milestone of milestones) {
+      if (
+        score === milestone.score &&
+        !shownMilestones.has(milestone.score)
+      ) {
+        shownMilestones.add(milestone.score);
+        showMilestone(milestone.message);
+        break;
+      }
+    }
+
+    drop.remove(); // Remove the drop element from the DOM
   });
 
-  // Remove drops that reach the bottom (weren't clicked)
+  // Remove drop from DOM when animation ends (wasn't clicked)
   drop.addEventListener("animationend", () => {
     drop.remove(); // Clean up drops that weren't caught
   });
+}
+
+// Show milestone message (simple overlay)
+function showMilestone(message) {
+  const milestoneDiv = document.createElement("div");
+  milestoneDiv.textContent = message;
+  milestoneDiv.style.position = "fixed";
+  milestoneDiv.style.top = "20%";
+  milestoneDiv.style.left = "50%";
+  milestoneDiv.style.transform = "translate(-50%, -50%)";
+  milestoneDiv.style.background = "#FFC907";
+  milestoneDiv.style.color = "#131313";
+  milestoneDiv.style.padding = "18px 32px";
+  milestoneDiv.style.borderRadius = "10px";
+  milestoneDiv.style.fontSize = "2rem";
+  milestoneDiv.style.fontWeight = "bold";
+  milestoneDiv.style.boxShadow = "0 4px 16px rgba(0,0,0,0.12)";
+  milestoneDiv.style.zIndex = "10001";
+  milestoneDiv.style.opacity = "0.97";
+  document.body.appendChild(milestoneDiv);
+
+  setTimeout(() => {
+    milestoneDiv.remove();
+  }, 1200);
 }
 
 // Confetti effect for win
@@ -152,4 +242,8 @@ function showConfetti() {
   setTimeout(() => {
     confettiContainer.remove();
   }, 2000);
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

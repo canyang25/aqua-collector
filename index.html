@@ -14,6 +14,12 @@
         <div class="score-panel">
             <div class="score">Score: <span id="score">0</span></div>
             <div class="timer">Time: <span id="time">30</span>s</div>
+            <label for="difficulty" style="margin: 0 10px; font-weight: bold;">Difficulty:</label>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hard">Hard</option>
+            </select>
             <button id="start-btn">Start Game</button>
             <button id="reset-btn">Reset</button>
         </div>
@@ -21,7 +27,27 @@
         <div id="game-container">
         </div>
     </div>
-    
+    <!-- .game-wrapper ends here -->
+
+    <!-- Sound effects -->
+    <audio id="sfx-collect" src="sounds/collect.mp3" preload="auto"></audio>
+    <audio id="sfx-miss" src="sounds/miss.mp3" preload="auto"></audio>
+    <audio id="sfx-button" src="sounds/button.mp3" preload="auto"></audio>
+    <audio id="sfx-win" src="sounds/win.mp3" preload="auto"></audio>
+
+    <footer style="margin-top: 30px; text-align: center; font-size: 16px; color: #888;">
+        <hr style="margin-bottom: 10px;">
+        <p>
+            Learn more at
+            <a href="https://www.charitywater.org/" target="_blank" rel="noopener" style="color: #2E9DF7; text-decoration: underline;">
+                charity: water
+            </a>
+            &nbsp;|&nbsp;
+            <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener" style="color: #FFC907; text-decoration: underline;">
+                Donate Now
+            </a>
+        </p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
