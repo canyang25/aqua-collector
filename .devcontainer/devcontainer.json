@@ -1,0 +1,21 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "ms-vscode.live-server"
+      ],
+      "settings": {
+        "livePreview.autoRefreshPreview": "On All Changes in Editor",
+        "editor.minimap.enabled": false,
+        "workbench.colorTheme": "Visual Studio Dark",
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.wordWrap": "on",
+        "editor.stickyScroll.enabled": false
+      }
+    }
+  }
+}
