@@ -32,10 +32,3 @@ Players collect as many falling water drops as possible within a 30-second timer
 3. Click or tap each drop before it hits the bottom to gain points.  
 4. After 30 seconds, the game ends and displays a random message based on the score.
 
----
-
-## Future Improvements
-
-- Introduce “bad” drops that deduct points when clicked  
-- Implement progressive difficulty (increasing drop speed)  
-- Add sound effects and visual animations  
