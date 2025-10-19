@@ -1,47 +1,55 @@
-# charity: water – Water Drop Game Starter
-In this game, users collect as many falling water drops as possible. Users tap to collect drops before they hit the ground. You’ll be working from a partially built version of the game. Some functionality is already provided, and your job is to complete the rest.
+# charity: water – Water Drop Game
 
-## What’s Already Done
+A browser-based click game built with **HTML**, **CSS**, and **JavaScript**.  
+Players collect as many falling water drops as possible within a 30-second timer.
 
-The starter files already include:
+---
 
-- A **heading and tagline**
-- A **start button**
-- A **game container** where water drops appear
-- A **placeholder timer and score** (not functional yet)
-- A **logo image** from charity: water
-- Working code that:
-  - Starts the game when the start button is clicked
-  - Makes water drops fall randomly at different sizes
+## Features
 
-## What You Need to Add
+- Randomly generated falling drops with varying sizes and speeds
+- Real-time score tracking (+1 point per collected drop)
+- Countdown timer that ends the game at 30 seconds
+- End-of-game message logic:
+  - Score ≥ 20 → randomly selected *winning* message
+  - Score < 20 → randomly selected *try again* message
+- Fully responsive across desktop and mobile devices
 
-Here’s what you're required to implement to bring the game to life:
+---
 
-### Game Functionality
+## Technology Stack
 
-- **Update the score**
-  - +1 point for each drop clicked  
+- **HTML5** – layout and structure  
+- **CSS3 (Flexbox)** – responsive styling  
+- **JavaScript (ES6)** – game logic, timing, and DOM manipulation  
 
-- **Add a 30-second timer**
-  - Implement a countdown timer that starts at 30 seconds when the game begins
-  - When the timer reaches 0, the game ends automatically
+---
 
-- **Display a message when the game ends**
-  - If the player scores **20 or more points**, show a **winning** message  
-  - If the player scores **less than 20 points**, show a **"try again"** message  
-  - Create one array of possible winning messages and one array of losing messages
-  - Depending on whether the user wins or loses, randomly pick and display a message from the appropriate array
+## Gameplay Flow
 
-### Visual Styling
+1. Click **Start** to begin.  
+2. Water drops fall randomly within the container.  
+3. Click or tap each drop before it hits the bottom to gain points.  
+4. After 30 seconds, the game ends and displays a random message based on the score.
 
-- **Add charity: water branding**
-  
-  - Use the provided logo  
-  - Use the [charity: water brand guidelines](https://drive.google.com/file/d/1ct4zYRIwHAtxoNQoeaVwWYPdnruSC6sr/view) to stay on-brand with colors and styling
-  - Add styling rules to ensure your game layout adjusts well across different screen sizes
+---
 
+## Future Improvements
 
-These are the minimum requirements, but if you'd like an additional challenge go ahead and give the LevelUps a shot! For example, you can set up logic to make some of the drops "bad" drops that remove points if the user click them, complete with a different color to distinguish them from "good" drops. Have fun and make the game your own!
+- Introduce “bad” drops that deduct points when clicked  
+- Implement progressive difficulty (increasing drop speed)  
+- Add sound effects and visual animations  
 
-If you have any questions or need any assistance with your code, reach out to the HelpHub or attend a Drop-In Hour. You got this!!
+---
+
+## Run Locally
+
+```bash
+# Clone this repository
+git clone https://github.com/<your-username>/charity-water-game.git
+
+# Navigate to the project folder
+cd charity-water-game
+
+# Open the game in your browser
+open index.html
