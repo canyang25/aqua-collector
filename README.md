@@ -1,4 +1,4 @@
-# charity: water – Water Drop Game
+# charity: water – aqua-collector
 
 A browser-based click game built with **HTML**, **CSS**, and **JavaScript**.  
 Players collect as many falling water drops as possible within a 30-second timer.
